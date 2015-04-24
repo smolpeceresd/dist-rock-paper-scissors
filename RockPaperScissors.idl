@@ -1,0 +1,39 @@
+module RockPaperScissors{
+    //Game struct will represent 1 game
+    struct Game{
+        //each game will have an ID that clients will use when making calls
+        long GameId;
+        //the move that the first client chose
+        string User1Move;
+        //the move that the second client chose
+        string User2Move;
+        //a game-specific timer, approx 5 seconds
+        long timer;
+    };
+
+    //callback interface
+    interface GUICallback{
+       void callBack(in string winner); 
+    };
+
+    //controller exposing methods for creating and interacting with a game
+    //contains synchronous and asynchronous methods
+    //originally both clients used synchronous methods but now the GUI uses async with callbacks
+    interface GameController{
+        //creates a new instance of game and returns an identifier as well as the ID for the game in the form on an Any
+        string NewGame(out any gameIdAny);
+
+        //used by CLI to check if the game is ready
+        //client passes in the ID it received from the Any and check if they have been matched with an opponent
+        boolean gameIsReadySynchronous(in long GameID);
+
+        //asynch version of above function, used with callbacks by the GUI
+        oneway void gameIsReady(in GUICallback callback, in long GameID);
+
+        //takes the user's choice and their identifier and returns the winner of the game - synchronous blocking call - used by CLI client
+        string SynchronousResult(in long GameID, in long move, in string userNumber);
+
+        //asynchronous call which uses callbacks - used by GUI client
+        oneway void Result(in GUICallback callback, in long GameID, in long move, in string userNumber);
+    }; 
+};
