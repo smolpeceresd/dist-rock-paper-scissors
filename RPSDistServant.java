@@ -133,6 +133,8 @@ public class RPSDistServant implements GameControllerOperations{
 					return "User1";
 				} else if(userName.equals("User2") && user1Move == null){
 					return "User2";
+				}else if((userName.equals("User1") && user2Move == null)&&(userName.equals("User2") && user1Move == null)){
+					return "tie";
 				}
 			}
 		}
